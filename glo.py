@@ -70,13 +70,8 @@ def read_process( inp,out,out2):
 		time1=t1.split(':')
 		for j in range(len(time1)):
 			time1[j] = int(time1[j])
-		difference=[]
-		for q in range(0,4):
-			difference.append(0)
-		difference[3]=(time2[3]+time1[3])/2
-		difference[2]=(time2[2]+time1[2])/2
-		difference[1]=(time2[1]+time1[1])/2
-		difference[0]=(time2[0]+time1[0])/2
+		difference=data[int((2*i+559)/2)][0]
+		
 		p1/=140
 		p2/=140
 		p3/=140
@@ -84,21 +79,27 @@ def read_process( inp,out,out2):
 		stress=0
 		if (p4 > 1.05*p1) and (rmssd3 > 1.09*rmssd4):
 			stress =1
-		out.write(str(k)+";"+t1+";"+t2+";"+str(difference[0])+":"+str(difference[1])+":"+str(difference[2])+":"+str(difference[3])+";"+str(p1)+";"+str(p2)+";"+str(p3)+";"+str(p4)+";"+str(rmssd1)+";"+str(rmssd2)+";"+str(rmssd3)+";"+str(rmssd4)+";"+str(stress)+"\n")
-		out2.write(str(difference[0])+":"+str(difference[1])+":"+str(difference[2])+":"+str(difference[3])+";"+str(stress)+"\n")
+		out2.write(difference+';'+str(stress)+'\n')
+		out.write(str(k)+";"+t1+";"+t2+";"+(difference)+";"+str(p1)+";"+str(p2)+";"+str(p3)+";"+str(p4)+";"+str(rmssd1)+";"+str(rmssd2)+";"+str(rmssd3)+";"+str(rmssd4)+";"+str(stress)+"\n")
 	#print(data)
 
 for z in range(len(lis)):
 	
-	s=lis[z]+"/*"
-	routes=(glob.glob(s))
-	for x in range(len(routes)):
-		st=routes[x]+"/biologicalData.csv"
+	s=lis[z]
+	routes = []
+	for i in range(0,4):
+		routes.append(s+'/route'+str(i+1))
+
+	for i in range(0,4):
+		st=routes[i]+"/biologicalData.csv"
 		re=open(st,mode='r')
-		stw=routes[x]+"/process.csv"
-		stw2=routes[x]+"/strees_non-stress.csv"
-		wr2=open(stw2,mode='w')
-		wr2.write("(time1+time2)/2;stress/non-stress\n")
+		stw=routes[i]+"/process.csv"
 		wr=open(stw,mode='w')
-		wr.write("Serial_no.;time1;time2;(time1+time2)/2;mean(HR1);mean(HR2);mean(HR3);mean(HR4);RMSSD1;RMSSD2;RMSSD3;RMSSD4;stress/non-stress\n")
+		if os.path.exists(routes[i]+"/strees_non-stress.csv"):
+			os.remove(routes[i]+"/strees_non-stress.csv")
+		st2 = routes[i]+"/stress_non-stress.csv"
+		wr2 = open(st2,mode='w')
+		wr2.write("median(time1,time2);stress/non-stress\n")
+		wr.write("Serial_no.;time1;time2;median(time1,time2);mean(HR1);mean(HR2);mean(HR3);mean(HR4);RMSSD1;RMSSD2;RMSSD3;RMSSD4;stress/non-stress\n")
 		read_process(re,wr,wr2)
+		
