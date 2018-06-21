@@ -1,0 +1,23 @@
+This result is based on ZeroR classification using the 80 % dataset of Driver 1 to 	train:
+
+Dataset		Correctly Classified Instances		Incorrectly Classified Instances
+
+Driver1			86.1979 %				13.8021 %
+(using 20%)
+Driver2			86.0313 %				13.9687 %
+
+Driver3			86.9589 %				13.0411 %
+
+Driver4			92.08   %				 7.92   %
+
+Driver5			86.3282 %				13.6718 %
+
+Driver6			81.329  %				18.671  %
+
+Driver7			85.2895 %				14.7105 %
+
+Driver8			86.1397 %				13.8603 %
+
+Driver9			90.4766 %				 9.5234 %
+
+Driver10		94.4646 %				 5.5354 %
